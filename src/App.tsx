@@ -7,7 +7,7 @@ const App = () => {
       <div className='lg:col-span-9 md:col-span-3 p-8'>
         {/* Welcome Header */}
         <div className='mb-8'>
-          <h1 className='text-3xl font-bold text-gray-800 mb-2'>Bienvenido de vuelta, Victor Soto</h1>
+          <h1 className='text-3xl font-bold text-gray-800 mb-2'>Bienvenido de vuelta, Victor Soto!</h1>
           <p className='text-gray-600'>
             {new Date().toLocaleDateString('es-ES', {
               weekday: 'long',
