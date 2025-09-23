@@ -49,7 +49,7 @@ The project is configured for automatic deployment to GitHub Pages:
 - **Manual deployment**: `pnpm run deploy` (builds and deploys to gh-pages branch)
 - **Automatic deployment**: GitHub Actions workflow triggers on pushes to main branch
 - **Build output**: Located in `dist/` directory
-- **Base path**: Configured for `/inca-app/` repository path
+- **Base path**: Configured for `/inca-app-ui/` repository path
 
 ### GitHub Actions Workflow
 
