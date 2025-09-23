@@ -44,6 +44,9 @@ jobs:
       run: pnpm run build
       env:
         NODE_ENV: production
+        VITE_API_URL: ${{ secrets.VITE_API_URL }}
+        VITE_API_TOKEN: ${{ secrets.VITE_API_TOKEN }}
+        VITE_AWS_API_KEY: ${{ secrets.VITE_AWS_API_KEY }}
 
     - name: Add .nojekyll file
       run: touch dist/.nojekyll
