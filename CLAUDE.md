@@ -40,10 +40,34 @@ src/
 - `tsconfig.json` / `tsconfig.app.json` / `tsconfig.node.json` - TypeScript configurations
 - `.nvmrc` - Node version specification
 
+## Deployment
+
+### GitHub Pages Integration
+
+The project is configured for automatic deployment to GitHub Pages:
+
+- **Manual deployment**: `pnpm run deploy` (builds and deploys to gh-pages branch)
+- **Automatic deployment**: GitHub Actions workflow triggers on pushes to main branch
+- **Build output**: Located in `dist/` directory
+- **Base path**: Configured for `/inca-app/` repository path
+
+### GitHub Actions Workflow
+
+- Located at `.github/workflows/deploy.yml`
+- Uses pnpm for package management
+- Runs linting and builds before deployment
+- Deploys only from main branch
+
+### Prerequisites for Deployment
+
+1. Repository must be pushed to GitHub
+2. GitHub Pages must be enabled in repository settings
+3. Pages source should be set to "GitHub Actions"
+
 ## Development Notes
 
 - Uses React 19 with modern features and StrictMode enabled
 - ESLint configured with recommended TypeScript and React rules
 - Tailwind CSS configured as a Vite plugin for optimal performance
 - No testing framework currently configured
-- Project is not yet initialized as a Git repository
+- Project uses pnpm package manager with lockfile
