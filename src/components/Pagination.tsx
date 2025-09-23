@@ -141,11 +141,11 @@ const Pagination = ({
               className={`px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
                 loading ? 'bg-gray-100 border-gray-200 cursor-not-allowed' : 'border-gray-300 bg-white'
               }`}
-              aria-label='Items por p&acute;gina'
+              aria-label='Items por página'
             >
               {pageSizeOptions.map((option) => (
                 <option key={option} value={option}>
-                  {option} por p&acute;gina
+                  {option} por página
                 </option>
               ))}
             </select>
@@ -246,11 +246,11 @@ const Pagination = ({
                 className={`px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
                   loading ? 'bg-gray-100 border-gray-200 cursor-not-allowed' : 'border-gray-300 bg-white'
                 }`}
-                aria-label='Items por p&acute;gina'
+                aria-label='Items por página'
               >
                 {pageSizeOptions.map((option) => (
                   <option key={option} value={option}>
-                    {option} por p&acute;gina
+                    {option} por página
                   </option>
                 ))}
               </select>
