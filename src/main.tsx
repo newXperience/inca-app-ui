@@ -20,10 +20,13 @@ const queryClient = new QueryClient({
   },
 })
 
+// Get the base name from the environment, default to '/' for local development
+const basename = import.meta.env.PROD ? '/inca-app-ui' : '/'
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <App />
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
