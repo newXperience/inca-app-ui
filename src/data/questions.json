@@ -1,0 +1,55 @@
+{
+  "page": 1,
+  "page_size": 50,
+  "total_items": 1234,
+  "total_pages": 25,
+  "data": [
+    {
+      "id": 101,
+      "question": "¿Cuál es el punto de inicio tradicional del Camino Inca a Machu Picchu?",
+      "answers": [
+        {
+          "answer_id": 1001,
+          "text": "Kilómetro 82 (Piscacucho)",
+          "is_correct": true
+        },
+        {
+          "answer_id": 1002,
+          "text": "Ollantaytambo",
+          "is_correct": false
+        },
+        {
+          "answer_id": 1003,
+          "text": "Cusco (Plaza de Armas)",
+          "is_correct": false
+        },
+        {
+          "answer_id": 1004,
+          "text": "Aguas Calientes",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "question": "¿Qué nombre quechua recibe Machu Picchu?",
+      "answers": [
+        {
+          "answer_id": 1011,
+          "text": "Montaña Vieja",
+          "is_correct": true
+        },
+        {
+          "answer_id": 1012,
+          "text": "Montaña Nueva",
+          "is_correct": false
+        },
+        {
+          "answer_id": 1013,
+          "text": "Piedra Sagrada",
+          "is_correct": false
+        }
+      ]
+    }
+  ]
+}

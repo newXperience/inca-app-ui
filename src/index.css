@@ -3,3 +3,46 @@
 @theme {
   --font-sans: 'Karla', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
+
+/* DataTable custom styles */
+.datatable-search {
+  @apply block w-full px-3 py-1.5 text-base text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out mb-4;
+}
+
+.datatable-selector {
+  @apply block w-full px-3 py-1.5 text-base text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out;
+}
+
+.datatable-active {
+  @apply bg-blue-50;
+}
+
+.datatable-disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* DataTable pagination styles */
+.dataTable-wrapper .dataTable-top,
+.dataTable-wrapper .dataTable-bottom {
+  @apply p-4 bg-gray-50 border-t border-gray-200;
+}
+
+.dataTable-wrapper .dataTable-info {
+  @apply text-sm text-gray-700;
+}
+
+.dataTable-wrapper .dataTable-pagination ul {
+  @apply flex space-x-1;
+}
+
+.dataTable-wrapper .dataTable-pagination li {
+  @apply inline-block;
+}
+
+.dataTable-wrapper .dataTable-pagination a {
+  @apply px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded;
+}
+
+.dataTable-wrapper .dataTable-pagination .active a {
+  @apply bg-blue-500 text-white border-blue-500 hover:bg-blue-600;
+}
