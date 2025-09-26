@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a React + TypeScript + Vite e-commerce application using Tailwind CSS for styling. The project uses modern React 19.1 with TypeScript 5.8 and is configured with SWC for fast refresh.
+This is a React + TypeScript + Vite Inca App application using Tailwind CSS for styling. The project uses modern React 19.1 with TypeScript 5.8 and is configured with SWC for fast refresh.
 
 ## Development Commands
 

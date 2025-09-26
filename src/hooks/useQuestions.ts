@@ -31,7 +31,7 @@ const API_CONFIG = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
     'x-api-key': import.meta.env.VITE_AWS_API_KEY,
-    'x-origin': 'pe.newxperience.jupana',
+    'x-origin': 'pe.newxperience.caminosdelinca',
   },
 }
 
