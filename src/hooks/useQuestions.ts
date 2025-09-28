@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
 
 import { type PagedData } from '../components/DataTable'
+import { apiClient } from '../services/apiClient'
 
 // Type definitions
 export interface AnswerResponse {
@@ -24,17 +24,6 @@ export interface QuestionPageResponse {
   data: QuestionResponse[]
 }
 
-// API configuration
-const API_CONFIG = {
-  baseURL: import.meta.env.VITE_API_URL || '',
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
-    'x-api-key': import.meta.env.VITE_AWS_API_KEY,
-    'x-origin': 'pe.newxperience.caminosdelinca',
-  },
-}
-
 // API function to fetch questions
 const fetchQuestions = async (
   page: number,
@@ -50,11 +39,10 @@ const fetchQuestions = async (
     params.search = search.trim()
   }
 
-  const response = await axios.get<{ data: QuestionPageResponse }>(
-    `${API_CONFIG.baseURL}/caminosdelinca/questions_with_answers`,
+  const response = await apiClient.instance.get<{ data: QuestionPageResponse }>(
+    `/caminosdelinca/questions_with_answers`,
     {
       params,
-      headers: API_CONFIG.headers,
     }
   )
 

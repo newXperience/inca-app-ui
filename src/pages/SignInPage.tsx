@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuth } from '../hooks/useAuth'
 
-const SignIn = () => {
+const SignInPage = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const { signIn, error } = useAuth()
@@ -18,8 +18,6 @@ const SignIn = () => {
     try {
       await signIn(formData.get('username') as string, formData.get('password') as string)
       navigate(from, { replace: true })
-    } catch (error) {
-      console.error(error)
     } finally {
       setIsSubmitting(false)
     }
@@ -65,4 +63,4 @@ const SignIn = () => {
   )
 }
 
-export default SignIn
+export default SignInPage

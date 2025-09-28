@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
 
-const Dashboard = () => {
+const DashboardPage = () => {
   return (
     <>
       {/* Welcome Header */}
@@ -94,4 +94,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default DashboardPage

@@ -6,7 +6,7 @@ import { useSearchParams } from 'react-router-dom'
 import DataTable, { type PagedData, type TableAction, type TableColumn } from '../components/DataTable'
 import { type QuestionResponse, useQuestions } from '../hooks/useQuestions'
 
-const Question = () => {
+const QuestionPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [debouncedSearch, setDebouncedSearch] = useState(searchParams.get('search') || '')
 
@@ -134,4 +134,4 @@ const Question = () => {
   )
 }
 
-export default Question
+export default QuestionPage

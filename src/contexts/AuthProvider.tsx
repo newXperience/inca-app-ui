@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import axios, { AxiosError } from 'axios'
+
+
+import { apiClient } from '../services/apiClient'
 
 import { AuthContext } from './AuthContext'
 
 import type { ApiErrorResponse, AuthContextType, User } from '../types/auth'
+import type { AxiosError } from 'axios'
 
 const signInAPI = async (username: string, password: string) => {
-  const { data } = await axios.post(
-    `${import.meta.env.VITE_API_URL}/login`,
-    {
-      username,
-      password,
-    },
-    {
-      headers: { 'x-api-key': import.meta.env.VITE_AWS_API_KEY },
-    }
-  )
+  const { data } = await apiClient.instance.post(`/login`, {
+    username,
+    password,
+  })
   return data.data
 }
 
@@ -31,7 +28,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const token = localStorage.getItem('token')
     const expiresAt = localStorage.getItem('expiresAt')
     const storedUser = localStorage.getItem('user')
-    if (token && expiresAt && new Date(expiresAt) > new Date() && storedUser) {
+
+    if (!!token && !!storedUser && !!expiresAt && new Date(expiresAt) > new Date()) {
       try {
         setUser(JSON.parse(storedUser))
       } catch {
@@ -47,9 +45,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     mutationFn: ({ username, password }: { username: string; password: string }) => signInAPI(username, password),
     onSuccess: (userData: User) => {
       const token = userData.token
-      const expiresAt = userData.expiresIn
+      const expiresAt = new Date(Date.now() + Number(userData.expiresIn) * 1000)
       localStorage.setItem('token', token)
-      localStorage.setItem('expiresAt', expiresAt)
+      localStorage.setItem('expiresAt', expiresAt.toString())
       localStorage.setItem('user', JSON.stringify(userData))
       setUser(userData)
       setError(null)
