@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { type PagedData } from '../components/DataTable'
 import { apiClient } from '../services/apiClient'
@@ -13,6 +14,8 @@ export interface AnswerResponse {
 export interface QuestionResponse {
   id: number
   question: string
+  feedback?: string
+  status?: 'AVAILABLE' | 'UNAVAILABLE'
   answers: AnswerResponse[]
 }
 
@@ -22,6 +25,13 @@ export interface QuestionPageResponse {
   total_items: number
   total_pages: number
   data: QuestionResponse[]
+}
+
+export interface UpdateQuestionRequest {
+  question: string
+  feedback?: string
+  status?: 'AVAILABLE' | 'UNAVAILABLE'
+  answers: { value: string; isCorrect: boolean }[]
 }
 
 // API function to fetch questions
@@ -57,6 +67,10 @@ const fetchQuestions = async (
   }
 }
 
+const updateQuestion = async (id: number, data: UpdateQuestionRequest) => {
+  await apiClient.instance.put<void>(`/caminosdelinca/questions/${id}`, data)
+}
+
 // Custom hook using React Query
 export const useQuestions = (page: number, pageSize: number = 50, search: string = '') => {
   return useQuery({
@@ -80,16 +94,20 @@ export const useCreateQuestion = () => {
   // })
 }
 
-// Hook for updating a question (mutation)
 export const useUpdateQuestion = () => {
-  // TODO: Implement when update endpoint is available
-  // return useMutation({
-  //   mutationFn: ({ id, data }: { id: number; data: UpdateQuestionRequest }) =>
-  //     updateQuestion(id, data),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ['questions'] })
-  //   },
-  // })
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: UpdateQuestionRequest }) => updateQuestion(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['questions'] })
+      toast.success('Pregunta actualizada correctamente')
+    },
+    onError: (error) => {
+      toast.error('Error al actualizar la pregunta')
+      throw error
+    },
+  })
 }
 
 // Hook for deleting a question (mutation)

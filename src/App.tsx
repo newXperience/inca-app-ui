@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { Toaster } from 'sonner'
 
 import ProtectedRoute from './components/ProtectedRoute'
 import Sidebar from './components/Sidebar'
@@ -49,6 +50,7 @@ const AppContent = () => {
 const App = () => {
   return (
     <AuthProvider>
+      <Toaster />
       <AppContent />
     </AuthProvider>
   )

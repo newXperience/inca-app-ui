@@ -4,11 +4,14 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useSearchParams } from 'react-router-dom'
 
 import DataTable, { type PagedData, type TableAction, type TableColumn } from '../components/DataTable'
+import EditQuestionModal from '../components/EditQuestionModal'
 import { type QuestionResponse, useQuestions } from '../hooks/useQuestions'
 
 const QuestionPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [debouncedSearch, setDebouncedSearch] = useState(searchParams.get('search') || '')
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [selectedQuestion, setSelectedQuestion] = useState<QuestionResponse | undefined>()
 
   const currentPage = Number(searchParams.get('page')) || 1
   const pageSize = Number(searchParams.get('pageSize')) || 50
@@ -54,8 +57,13 @@ const QuestionPage = () => {
   }
 
   const handleEditQuestion = (question: QuestionResponse) => {
-    console.log('Edit question:', question.id)
-    // TODO: Implement edit functionality
+    setSelectedQuestion(question)
+    setEditModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setEditModalOpen(false)
+    setSelectedQuestion(undefined)
   }
 
   const handleDeleteQuestion = (question: QuestionResponse) => {
@@ -118,19 +126,23 @@ const QuestionPage = () => {
   }
 
   return (
-    <DataTable<QuestionResponse>
-      title='Preguntas'
-      isLoading={isLoading}
-      data={transformedData || defaultData}
-      columns={columns}
-      actions={actions}
-      emptyMessage='No existen registros'
-      handlePageChange={handlePageChange}
-      handlePageSizeChange={handlePageSizeChange}
-      handleSearch={handleSearchChange}
-      searchValue={searchValue}
-      searchPlaceholder='Buscar por pregunta...'
-    />
+    <>
+      <DataTable<QuestionResponse>
+        title='Preguntas'
+        isLoading={isLoading}
+        data={transformedData || defaultData}
+        columns={columns}
+        actions={actions}
+        emptyMessage='No existen registros'
+        handlePageChange={handlePageChange}
+        handlePageSizeChange={handlePageSizeChange}
+        handleSearch={handleSearchChange}
+        searchValue={searchValue}
+        searchPlaceholder='Buscar por pregunta...'
+      />
+
+      <EditQuestionModal isOpen={editModalOpen} onClose={handleCloseModal} question={selectedQuestion} />
+    </>
   )
 }
 
