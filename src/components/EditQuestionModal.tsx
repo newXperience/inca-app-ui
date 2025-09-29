@@ -77,7 +77,6 @@ const EditQuestionModal = ({ isOpen, onClose, question }: EditQuestionModalProps
       { id: question.id, data },
       {
         onSuccess: () => {
-          toast.success('Pregunta actualizada correctamente')
           onClose()
         },
         onError: (error) => {
