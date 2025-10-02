@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+
 import Pagination from './Pagination'
 
 export interface PagedData<T> {
@@ -41,6 +43,12 @@ export interface DataTableProps<T> {
   handleSearch?: (searchTerm: string) => void
   searchValue?: string
   searchPlaceholder?: string
+  createAction?: {
+    label: string
+    icon?: React.ReactNode
+    className?: string
+    onClick: () => void
+  }
 }
 
 const DataTable = <T,>({
@@ -55,6 +63,7 @@ const DataTable = <T,>({
   handleSearch,
   searchValue = '',
   searchPlaceholder = 'Buscar...',
+  createAction,
 }: DataTableProps<T>) => {
   const loader = (
     <div className='bg-white rounded-lg shadow-sm overflow-hidden'>
@@ -189,21 +198,7 @@ const DataTable = <T,>({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
-              <svg
-                className='w-4 h-4 text-gray-400'
-                aria-hidden='true'
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 20 20'
-              >
-                <path
-                  stroke='currentColor'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth='2'
-                  d='m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z'
-                />
-              </svg>
+              <MagnifyingGlassIcon className='w-4 h-4 text-gray-400' />
             </div>
             <input
               type='search'
@@ -216,6 +211,15 @@ const DataTable = <T,>({
             />
           </div>
         </div>
+        {createAction && (
+          <button
+            type='button'
+            onClick={createAction.onClick}
+            className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors cursor-pointer'
+          >
+            {createAction.label}
+          </button>
+        )}
       </div>
     </div>
   )

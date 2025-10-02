@@ -27,7 +27,7 @@ export interface QuestionPageResponse {
   data: QuestionResponse[]
 }
 
-export interface UpdateQuestionRequest {
+export interface QuestionRequest {
   question: string
   feedback?: string
   status?: 'AVAILABLE' | 'UNAVAILABLE'
@@ -67,8 +67,16 @@ const fetchQuestions = async (
   }
 }
 
-const updateQuestion = async (id: number, data: UpdateQuestionRequest) => {
+const createQuestion = async (data: QuestionRequest) => {
+  await apiClient.instance.post<void>(`/caminosdelinca/questions`, data)
+}
+
+const updateQuestion = async (id: number, data: QuestionRequest) => {
   await apiClient.instance.put<void>(`/caminosdelinca/questions/${id}`, data)
+}
+
+const deleteQuestion = async (id: number) => {
+  await apiClient.instance.delete<void>(`/caminosdelinca/questions/${id}`)
 }
 
 // Custom hook using React Query
@@ -83,22 +91,27 @@ export const useQuestions = (page: number, pageSize: number = 50, search: string
   })
 }
 
-// Hook for creating a new question (mutation)
 export const useCreateQuestion = () => {
-  // TODO: Implement when create endpoint is available
-  // return useMutation({
-  //   mutationFn: (newQuestion: CreateQuestionRequest) => createQuestion(newQuestion),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ['questions'] })
-  //   },
-  // })
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (newQuestion: QuestionRequest) => createQuestion(newQuestion),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['questions'] })
+      toast.success('Pregunta creada correctamente')
+    },
+    onError: (error) => {
+      toast.error('Error al crear la pregunta')
+      throw error
+    },
+  })
 }
 
 export const useUpdateQuestion = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdateQuestionRequest }) => updateQuestion(id, data),
+    mutationFn: ({ id, data }: { id: number; data: QuestionRequest }) => updateQuestion(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['questions'] })
       toast.success('Pregunta actualizada correctamente')
@@ -110,15 +123,19 @@ export const useUpdateQuestion = () => {
   })
 }
 
-// Hook for deleting a question (mutation)
 export const useDeleteQuestion = () => {
-  // TODO: Implement when delete endpoint is available
-  // return useMutation({
-  //   mutationFn: (id: number) => deleteQuestion(id),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ['questions'] })
-  //   },
-  // })
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (id: number) => deleteQuestion(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['questions'] })
+    },
+    onError: (error) => {
+      toast.error('Error al eliminar la pregunta')
+      throw error
+    },
+  })
 }
 
 export default useQuestions

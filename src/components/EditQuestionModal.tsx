@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { toast } from 'sonner'
 
-import { type QuestionResponse, type UpdateQuestionRequest, useUpdateQuestion } from '../hooks/useQuestions'
+import { type QuestionRequest, type QuestionResponse, useUpdateQuestion } from '../hooks/useQuestions'
 
 import Modal from './Modal'
 
@@ -65,7 +65,7 @@ const EditQuestionModal = ({ isOpen, onClose, question }: EditQuestionModalProps
       return
     }
 
-    const data: UpdateQuestionRequest = {
+    const data: QuestionRequest = {
       question: questionText.trim(),
       feedback: feedback?.trim() || '',
       status,
