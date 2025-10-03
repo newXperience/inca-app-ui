@@ -15,7 +15,7 @@ export interface QuestionResponse {
   id: number
   question: string
   feedback?: string
-  status?: 'AVAILABLE' | 'UNAVAILABLE'
+  status?: 'AVAILABLE' | 'DELETED'
   answers: AnswerResponse[]
 }
 
@@ -30,7 +30,7 @@ export interface QuestionPageResponse {
 export interface QuestionRequest {
   question: string
   feedback?: string
-  status?: 'AVAILABLE' | 'UNAVAILABLE'
+  status?: 'AVAILABLE' | 'DELETED'
   answers: { value: string; isCorrect: boolean }[]
 }
 

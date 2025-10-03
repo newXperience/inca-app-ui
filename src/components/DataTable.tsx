@@ -31,6 +31,7 @@ export interface TableAction<T> {
 export interface DataTableProps<T> {
   title: string
   isLoading: boolean
+  isSearching?: boolean
   data: PagedData<T>
   columns: TableColumn<T>[]
   actions?: TableAction<T>[]
@@ -54,6 +55,7 @@ export interface DataTableProps<T> {
 const DataTable = <T,>({
   title,
   isLoading,
+  isSearching = false,
   data,
   columns,
   actions,
@@ -128,7 +130,9 @@ const DataTable = <T,>({
   const tableHeader = columns.map((column, index) => (
     <th
       key={index}
-      className={column.className || 'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'}
+      className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ${
+        column.className?.includes('text-right') ? 'text-right' : 'text-left'
+      } ${column.className || ''}`}
     >
       {column.label}
     </th>
@@ -138,8 +142,8 @@ const DataTable = <T,>({
     const cells = columns.map((column, colIndex) => {
       if (column.key === 'actions' && actions) {
         return (
-          <td key={colIndex} className='px-6 py-4 text-sm text-gray-900'>
-            <div className='flex items-center space-x-3'>
+          <td key={colIndex} className='px-6 py-4 text-sm text-gray-900 text-right'>
+            <div className='flex items-center justify-end space-x-2'>
               {actions.map((action, actionIndex) => (
                 <button
                   key={actionIndex}
@@ -198,17 +202,28 @@ const DataTable = <T,>({
           </label>
           <div className='relative'>
             <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
-              <MagnifyingGlassIcon className='w-4 h-4 text-gray-400' />
+              {isSearching ? (
+                <div className='w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin'></div>
+              ) : (
+                <MagnifyingGlassIcon className='w-4 h-4 text-gray-400' />
+              )}
             </div>
             <input
               type='search'
               id='search-input'
               value={searchValue}
               onChange={handleSearchChange}
-              className='block w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200'
+              className={`block w-full pl-10 pr-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
+                isSearching ? 'border-blue-300 bg-blue-50' : 'border-gray-300'
+              }`}
               placeholder={searchPlaceholder}
               disabled={isLoading}
             />
+            {isSearching && (
+              <div className='absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none'>
+                <span className='text-xs text-blue-600 font-medium'>Buscando...</span>
+              </div>
+            )}
           </div>
         </div>
         {createAction && (
@@ -232,12 +247,14 @@ const DataTable = <T,>({
       ) : data.items.length > 0 ? (
         <div className='bg-white rounded-lg shadow-sm overflow-hidden'>
           {searchBar}
-          <table className='min-w-full divide-y divide-gray-200'>
-            <thead className='bg-gray-50'>
-              <tr>{tableHeader}</tr>
-            </thead>
-            <tbody className='bg-white divide-y divide-gray-200'>{tableBody}</tbody>
-          </table>
+          <div className='overflow-x-auto'>
+            <table className='min-w-full divide-y divide-gray-200'>
+              <thead className='bg-gray-50'>
+                <tr>{tableHeader}</tr>
+              </thead>
+              <tbody className='bg-white divide-y divide-gray-200'>{tableBody}</tbody>
+            </table>
+          </div>
           <Pagination
             pages={data?.totalPages || 0}
             currentPage={data?.page || 0}

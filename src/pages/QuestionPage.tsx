@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react'
 
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { ChevronRightIcon, HomeIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import { useSearchParams } from 'react-router-dom'
 
 import CreateQuestionModal from '../components/CreateQuestionModal'
-import DataTable, { type PagedData, type TableAction, type TableColumn } from '../components/DataTable'
+import { type PagedData } from '../components/DataTable'
 import DeleteQuestionModal from '../components/DeleteQuestionModal'
 import EditQuestionModal from '../components/EditQuestionModal'
+import QuestionListView from '../components/QuestionListView'
 import { type QuestionResponse, useQuestions } from '../hooks/useQuestions'
 
 const QuestionPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [debouncedSearch, setDebouncedSearch] = useState(searchParams.get('search') || '')
+  const [isSearching, setIsSearching] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [createModalOpen, setCreateModalOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
@@ -21,14 +23,19 @@ const QuestionPage = () => {
   const pageSize = Number(searchParams.get('pageSize')) || 50
   const searchValue = searchParams.get('search') || ''
 
-  // Debounce search term with 2 second delay
+  // Debounce search term with 2 second delay and loading indicator
   useEffect(() => {
+    if (searchValue !== debouncedSearch) {
+      setIsSearching(true)
+    }
+
     const timer = setTimeout(() => {
       setDebouncedSearch(searchValue)
+      setIsSearching(false)
     }, 2000)
 
     return () => clearTimeout(timer)
-  }, [searchValue])
+  }, [searchValue, debouncedSearch])
 
   // Using React Query hook with debounced search
   const { data: transformedData, isLoading, error } = useQuestions(currentPage, pageSize, debouncedSearch)
@@ -88,17 +95,6 @@ const QuestionPage = () => {
     setSelectedQuestion(undefined)
   }
 
-  const renderAnswers = (question: QuestionResponse) => (
-    <div>
-      {question.answers.map((answer) => (
-        <p key={answer.id}>
-          {answer.answer}
-          {answer.is_correct ? ' (Correcta)' : ''}
-        </p>
-      ))}
-    </div>
-  )
-
   // Default data structure if no data is available
   const defaultData: PagedData<QuestionResponse> = {
     items: [],
@@ -108,64 +104,109 @@ const QuestionPage = () => {
     totalPages: 0,
   }
 
-  const columns: TableColumn<QuestionResponse>[] = [
-    { key: 'id', label: 'ID' },
-    { key: 'question', label: 'Pregunta' },
-    {
-      key: 'answers',
-      label: 'Respuestas',
-      render: (question) => renderAnswers(question),
-    },
-    { key: 'actions', label: 'Acciones' },
-  ]
-
-  const actions: TableAction<QuestionResponse>[] = [
-    {
-      label: 'Editar',
-      icon: <PencilSquareIcon className='w-5 h-5' />,
-      onClick: (question: QuestionResponse) => handleEditQuestion(question),
-    },
-    {
-      label: 'Eliminar',
-      icon: <TrashIcon className='w-5 h-5' />,
-      onClick: (question: QuestionResponse) => handleDeleteQuestion(question),
-    },
-  ]
-
-  // Show error state if there's an error
+  // Enhanced error state with retry functionality
   if (error) {
     return (
-      <div className='bg-red-50 border border-red-200 rounded-lg p-4'>
-        <h2 className='text-lg font-semibold text-red-800 mb-2'>Error al cargar preguntas</h2>
-        <p className='text-red-600'>{error instanceof Error ? error.message : 'Ocurrió un error inesperado'}</p>
+      <div className='min-h-[400px] flex items-center justify-center'>
+        <div className='text-center space-y-6 max-w-md'>
+          <div className='text-red-500 text-6xl'>⚠️</div>
+          <div className='space-y-2'>
+            <h3 className='text-xl font-semibold text-gray-900'>Error al cargar preguntas</h3>
+            <p className='text-gray-600'>
+              {error instanceof Error ? error.message : 'Ocurrió un error inesperado al cargar los datos.'}
+            </p>
+          </div>
+          <button
+            onClick={() => window.location.reload()}
+            className='bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors'
+          >
+            Intentar de nuevo
+          </button>
+        </div>
       </div>
     )
   }
 
   return (
-    <>
-      <DataTable<QuestionResponse>
-        title='Preguntas'
-        isLoading={isLoading}
-        data={transformedData || defaultData}
-        columns={columns}
-        actions={actions}
-        emptyMessage='No existen registros'
-        handlePageChange={handlePageChange}
-        handlePageSizeChange={handlePageSizeChange}
-        handleSearch={handleSearchChange}
-        searchValue={searchValue}
-        searchPlaceholder='Buscar por pregunta...'
-        createAction={{
-          label: 'Crear Pregunta',
-          onClick: handleCreateQuestion,
-        }}
-      />
+    <div className='space-y-6'>
+      {/* Page Header */}
+      <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-6'>
+        {/* Breadcrumbs */}
+        <nav className='flex items-center space-x-2 text-sm text-gray-500 mb-4'>
+          <HomeIcon className='w-4 h-4' />
+          <span>Administración</span>
+          <ChevronRightIcon className='w-4 h-4' />
+          <span className='text-gray-900 font-medium'>Gestionar preguntas</span>
+        </nav>
 
+        {/* Page Title and Description */}
+        <div className='flex items-start justify-between'>
+          <div className='space-y-2'>
+            <div className='flex items-center space-x-3'>
+              <QuestionMarkCircleIcon className='w-8 h-8 text-blue-600' />
+              <h1 className='text-2xl font-bold text-gray-900'>Gestión de Preguntas</h1>
+            </div>
+            <p className='text-gray-600 max-w-2xl'>
+              Administra las preguntas del sistema educativo. Puedes crear, editar y eliminar preguntas, así como
+              gestionar sus respuestas y configuraciones.
+            </p>
+          </div>
+
+          {/* Stats Cards */}
+          <div className='hidden md:flex space-x-4'>
+            <div className='bg-blue-50 rounded-lg p-4 text-center min-w-[100px]'>
+              <div className='text-2xl font-bold text-blue-600'>{transformedData?.items?.length || 0}</div>
+              <div className='text-sm text-blue-600'>Total</div>
+            </div>
+            <div className='bg-green-50 rounded-lg p-4 text-center min-w-[100px]'>
+              <div className='text-2xl font-bold text-green-600'>
+                {transformedData?.items.filter((q) => q.status === 'AVAILABLE').length || 0}
+              </div>
+              <div className='text-sm text-green-600'>Activas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Card */}
+      <div className='bg-white rounded-lg shadow-sm border border-gray-200 md:block hidden'>
+        <QuestionListView
+          isLoading={isLoading}
+          isSearching={isSearching}
+          data={transformedData || defaultData}
+          searchValue={searchValue}
+          searchPlaceholder='Buscar por pregunta...'
+          onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
+          onSearch={handleSearchChange}
+          onEdit={handleEditQuestion}
+          onDelete={handleDeleteQuestion}
+          onCreate={handleCreateQuestion}
+        />
+      </div>
+
+      {/* Mobile Layout */}
+      <div className='md:hidden'>
+        <QuestionListView
+          isLoading={isLoading}
+          isSearching={isSearching}
+          data={transformedData || defaultData}
+          searchValue={searchValue}
+          searchPlaceholder='Buscar por pregunta...'
+          onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
+          onSearch={handleSearchChange}
+          onEdit={handleEditQuestion}
+          onDelete={handleDeleteQuestion}
+          onCreate={handleCreateQuestion}
+        />
+      </div>
+
+      {/* Modals */}
       <EditQuestionModal isOpen={editModalOpen} onClose={handleCloseEditModal} question={selectedQuestion} />
       <CreateQuestionModal isOpen={createModalOpen} onClose={handleCloseCreateModal} />
       <DeleteQuestionModal isOpen={deleteModalOpen} onClose={handleCloseDeleteModal} question={selectedQuestion} />
-    </>
+    </div>
   )
 }
 
