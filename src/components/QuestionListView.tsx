@@ -56,6 +56,7 @@ const QuestionListView = ({
   const renderAnswers = (question: QuestionResponse) => {
     const maxAnswersToShow = 2
     const visibleAnswers = question.answers.slice(0, maxAnswersToShow)
+    const invisibleAnswers = question.answers.slice(maxAnswersToShow)
     const remainingCount = question.answers.length - maxAnswersToShow
 
     return (
@@ -76,7 +77,10 @@ const QuestionListView = ({
           </div>
         ))}
         {remainingCount > 0 && (
-          <div className='text-xs text-gray-500 italic'>
+          <div
+            className='text-xs text-gray-500 italic'
+            title={invisibleAnswers.map((answer) => answer.answer).join(', ')}
+          >
             +{remainingCount} respuesta{remainingCount > 1 ? 's' : ''} más
           </div>
         )}

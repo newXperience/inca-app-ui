@@ -123,7 +123,7 @@ const QuestionCard = ({ question, onEdit, onDelete }: QuestionCardProps) => {
           ))}
 
           {totalAnswers > 2 && (
-            <div className='text-xs text-gray-500 italic pl-6'>
+            <div className='text-xs text-gray-500 italic pl-6' title='Respuestas adicionales'>
               +{totalAnswers - 2} respuesta{totalAnswers - 2 > 1 ? 's' : ''} más
             </div>
           )}
@@ -141,7 +141,7 @@ const QuestionCard = ({ question, onEdit, onDelete }: QuestionCardProps) => {
           </span>
           <span className='flex items-center space-x-1'>
             <ExclamationTriangleIcon className='w-3 h-3 text-gray-400' />
-            <span>
+            <span title='Respuestas incorrectas'>
               {totalAnswers - correctAnswersCount} incorrecta{totalAnswers - correctAnswersCount !== 1 ? 's' : ''}
             </span>
           </span>
