@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { CheckIcon, LightBulbIcon, PencilSquareIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 import { type QuestionResponse } from '../hooks/useQuestions'
 
@@ -101,14 +101,31 @@ const QuestionListView = ({
       render: (question) => (
         <div className='space-y-1'>
           <p className='font-medium text-gray-900 leading-tight'>{question.question}</p>
-          {question.feedback && <p className='text-sm text-gray-500 italic'>💡 {question.feedback}</p>}
+          {question.feedback && (
+            <p className='text-sm text-gray-500 italic flex items-center space-x-1'>
+              <LightBulbIcon className='w-4 h-4 flex-shrink-0' />
+              <span>{question.feedback}</span>
+            </p>
+          )}
           <div className='flex items-center space-x-2 mt-2'>
             <span
               className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
                 question.status === 'AVAILABLE' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
               }`}
             >
-              {question.status === 'AVAILABLE' ? '✓ Disponible' : '✗ No disponible'}
+              <span className='flex items-center space-x-1'>
+                {question.status === 'AVAILABLE' ? (
+                  <>
+                    <CheckIcon className='w-3 h-3' />
+                    <span>Disponible</span>
+                  </>
+                ) : (
+                  <>
+                    <XMarkIcon className='w-3 h-3' />
+                    <span>No disponible</span>
+                  </>
+                )}
+              </span>
             </span>
           </div>
         </div>

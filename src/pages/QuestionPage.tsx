@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
 
-import { ChevronRightIcon, HomeIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
+import {
+  ChevronRightIcon,
+  ExclamationTriangleIcon,
+  HomeIcon,
+  QuestionMarkCircleIcon,
+} from '@heroicons/react/24/outline'
 import { useSearchParams } from 'react-router-dom'
 
 import CreateQuestionModal from '../components/CreateQuestionModal'
@@ -109,7 +114,9 @@ const QuestionPage = () => {
     return (
       <div className='min-h-[400px] flex items-center justify-center'>
         <div className='text-center space-y-6 max-w-md'>
-          <div className='text-red-500 text-6xl'>⚠️</div>
+          <div className='text-red-500'>
+            <ExclamationTriangleIcon className='w-16 h-16 mx-auto' />
+          </div>
           <div className='space-y-2'>
             <h3 className='text-xl font-semibold text-gray-900'>Error al cargar preguntas</h3>
             <p className='text-gray-600'>

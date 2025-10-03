@@ -36,7 +36,7 @@ const EditQuestionModal = ({ isOpen, onClose, question }: EditQuestionModalProps
   const submitAction = (formData: FormData) => {
     const questionText = formData.get('question') as string
     const feedback = formData.get('feedback') as string
-    const status = formData.get('status') as 'AVAILABLE' | 'UNAVAILABLE'
+    const status = formData.get('status') as 'AVAILABLE' | 'DELETED'
 
     // Client-side validation
     if (!questionText?.trim()) {
@@ -146,7 +146,7 @@ const EditQuestionModal = ({ isOpen, onClose, question }: EditQuestionModalProps
             className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
           >
             <option value='AVAILABLE'>Disponible</option>
-            <option value='UNAVAILABLE'>No disponible</option>
+            <option value='DELETED'>No disponible</option>
           </select>
         </div>
 

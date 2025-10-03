@@ -1,4 +1,12 @@
-import { CheckCircleIcon, ExclamationTriangleIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import {
+  CheckCircleIcon,
+  CheckIcon,
+  ExclamationTriangleIcon,
+  LightBulbIcon,
+  PencilSquareIcon,
+  TrashIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
 
 import { type QuestionResponse } from '../hooks/useQuestions'
 
@@ -26,7 +34,19 @@ const QuestionCard = ({ question, onEdit, onDelete }: QuestionCardProps) => {
                 question.status === 'AVAILABLE' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
               }`}
             >
-              {question.status === 'AVAILABLE' ? '✓ Disponible' : '✗ No disponible'}
+              <span className='flex items-center space-x-1'>
+                {question.status === 'AVAILABLE' ? (
+                  <>
+                    <CheckIcon className='w-3 h-3' />
+                    <span>Disponible</span>
+                  </>
+                ) : (
+                  <>
+                    <XMarkIcon className='w-3 h-3' />
+                    <span>No disponible</span>
+                  </>
+                )}
+              </span>
             </span>
           </div>
           <h3
@@ -40,16 +60,17 @@ const QuestionCard = ({ question, onEdit, onDelete }: QuestionCardProps) => {
             {question.question}
           </h3>
           {question.feedback && (
-            <p
-              className='text-sm text-gray-500 italic overflow-hidden'
+            <div
+              className='text-sm text-gray-500 italic overflow-hidden flex items-start space-x-1'
               style={{
                 display: '-webkit-box',
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
               }}
             >
-              💡 {question.feedback}
-            </p>
+              <LightBulbIcon className='w-4 h-4 flex-shrink-0 mt-0.5' />
+              <span className='flex-1'>{question.feedback}</span>
+            </div>
           )}
         </div>
 
