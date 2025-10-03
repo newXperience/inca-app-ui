@@ -97,7 +97,7 @@ const QuestionListView = ({
     {
       key: 'question',
       label: 'Pregunta',
-      className: 'min-w-[300px]',
+      className: 'min-w-[100px]',
       render: (question) => (
         <div className='space-y-1'>
           <p className='font-medium text-gray-900 leading-tight'>{question.question}</p>

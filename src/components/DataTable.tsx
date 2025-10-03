@@ -68,58 +68,74 @@ const DataTable = <T,>({
   createAction,
 }: DataTableProps<T>) => {
   const loader = (
-    <div className='bg-white rounded-lg shadow-sm overflow-hidden'>
-      <div className='animate-pulse'>
-        {/* Table Header Skeleton */}
-        <div className='bg-gray-50 px-6 py-3 border-b border-gray-200'>
-          <div className={`grid grid-cols-${columns.length} gap-4`}>
-            {columns.map((_, index) => (
-              <div key={index} className='h-4 bg-gray-300 rounded w-20'></div>
-            ))}
+    <div className='space-y-1'>
+      <div className='px-6 pt-6 pb-4'>
+        <div className='h-8 bg-gray-200 rounded w-64 mb-2'></div>
+        <div className='h-4 bg-gray-200 rounded w-96'></div>
+      </div>
+      <div className='bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden'>
+        <div className='animate-pulse'>
+          {/* Search Bar Skeleton */}
+          <div className='bg-gradient-to-r from-gray-50 to-white px-6 py-6 border-b border-gray-200'>
+            <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4'>
+              <div className='flex-1 max-w-2xl'>
+                <div className='h-12 bg-gray-200 rounded-xl'></div>
+              </div>
+              <div className='h-12 w-48 bg-gray-200 rounded-xl'></div>
+            </div>
           </div>
-        </div>
 
-        {/* Table Rows Skeleton */}
-        <div className='divide-y divide-gray-200'>
-          {Array.from({ length: 10 }).map((_, index) => (
-            <div key={index} className='px-6 py-4'>
-              <div className={`grid grid-cols-${columns.length} gap-4 items-center`}>
-                {columns.map((column, colIndex) => {
-                  if (column.key === 'actions') {
+          {/* Table Header Skeleton */}
+          <div className='bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200 px-8 py-4'>
+            <div className={`grid grid-cols-${columns.length} gap-4`}>
+              {columns.map((_, index) => (
+                <div key={index} className='h-4 bg-gray-300 rounded w-20'></div>
+              ))}
+            </div>
+          </div>
+
+          {/* Table Rows Skeleton */}
+          <div className='divide-y divide-gray-100'>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div key={index} className='px-8 py-5'>
+                <div className={`grid grid-cols-${columns.length} gap-4 items-center`}>
+                  {columns.map((column, colIndex) => {
+                    if (column.key === 'actions') {
+                      return (
+                        <div key={colIndex} className='flex items-center justify-end space-x-1'>
+                          <div className='h-9 w-9 bg-gray-200 rounded-lg'></div>
+                          <div className='h-9 w-9 bg-gray-200 rounded-lg'></div>
+                        </div>
+                      )
+                    }
+
+                    if (column.key === 'id') {
+                      return <div key={colIndex} className='h-4 bg-gray-200 rounded w-12'></div>
+                    }
+
                     return (
-                      <div key={colIndex} className='flex items-center space-x-3'>
-                        <div className='h-8 w-8 bg-gray-200 rounded'></div>
-                        <div className='h-8 w-8 bg-gray-200 rounded'></div>
+                      <div key={colIndex} className='space-y-2'>
+                        <div className='h-4 bg-gray-200 rounded w-full'></div>
+                        <div className='h-4 bg-gray-200 rounded w-3/4'></div>
                       </div>
                     )
-                  }
-
-                  if (column.key === 'id') {
-                    return <div key={colIndex} className='h-4 bg-gray-200 rounded w-8'></div>
-                  }
-
-                  return (
-                    <div key={colIndex} className='space-y-2'>
-                      <div className='h-4 bg-gray-200 rounded w-full'></div>
-                      <div className='h-4 bg-gray-200 rounded w-3/4'></div>
-                    </div>
-                  )
-                })}
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        {/* Pagination Skeleton */}
-        <div className='px-4 py-3 bg-white border-t border-gray-200'>
-          <div className='flex items-center justify-between'>
-            <div className='h-4 bg-gray-200 rounded w-32'></div>
-            <div className='flex items-center space-x-1'>
-              <div className='h-8 w-8 bg-gray-200 rounded'></div>
-              <div className='h-8 w-8 bg-gray-200 rounded'></div>
-              <div className='h-8 w-8 bg-gray-200 rounded'></div>
-              <div className='h-8 w-8 bg-gray-200 rounded'></div>
-              <div className='h-8 w-8 bg-gray-200 rounded'></div>
+          {/* Pagination Skeleton */}
+          <div className='px-6 py-4 bg-white border-t border-gray-100'>
+            <div className='flex items-center justify-between'>
+              <div className='h-4 bg-gray-200 rounded w-32'></div>
+              <div className='flex items-center space-x-1'>
+                <div className='h-8 w-8 bg-gray-200 rounded'></div>
+                <div className='h-8 w-8 bg-gray-200 rounded'></div>
+                <div className='h-8 w-8 bg-gray-200 rounded'></div>
+                <div className='h-8 w-8 bg-gray-200 rounded'></div>
+                <div className='h-8 w-8 bg-gray-200 rounded'></div>
+              </div>
             </div>
           </div>
         </div>
@@ -130,11 +146,13 @@ const DataTable = <T,>({
   const tableHeader = columns.map((column, index) => (
     <th
       key={index}
-      className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ${
+      className={`px-6 py-4 text-xs font-semibold text-gray-600 uppercase tracking-wide ${
         column.className?.includes('text-right') ? 'text-right' : 'text-left'
-      } ${column.className || ''}`}
+      } ${column.className || ''} first:pl-8 last:pr-8`}
     >
-      {column.label}
+      <div className='flex items-center space-x-2'>
+        <span>{column.label}</span>
+      </div>
     </th>
   ))
 
@@ -142,14 +160,14 @@ const DataTable = <T,>({
     const cells = columns.map((column, colIndex) => {
       if (column.key === 'actions' && actions) {
         return (
-          <td key={colIndex} className='px-6 py-4 text-sm text-gray-900 text-right'>
-            <div className='flex items-center justify-end space-x-2'>
+          <td key={colIndex} className='px-6 py-5 text-sm text-gray-900 text-right first:pl-8 last:pr-8'>
+            <div className='flex items-center justify-end space-x-1'>
               {actions.map((action, actionIndex) => (
                 <button
                   key={actionIndex}
                   className={
                     action.className ||
-                    'p-2 text-gray-400 hover:text-gray-600 transition-colors duration-200 cursor-pointer'
+                    'p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200 cursor-pointer'
                   }
                   title={action.label}
                   onClick={() => action.onClick(item)}
@@ -170,17 +188,17 @@ const DataTable = <T,>({
           key={colIndex}
           className={
             column.key === 'id'
-              ? 'px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900'
-              : 'px-6 py-4 text-sm text-gray-900'
+              ? 'px-6 py-5 whitespace-nowrap text-sm font-medium text-gray-900 first:pl-8 last:pr-8'
+              : 'px-6 py-5 text-sm text-gray-900 first:pl-8 last:pr-8'
           }
         >
-          {content}
+          <div className='max-w-xs lg:max-w-none'>{content}</div>
         </td>
       )
     })
 
     return (
-      <tr key={index} className='hover:bg-gray-50'>
+      <tr key={index} className='hover:bg-gray-50 transition-colors duration-150 group'>
         {cells}
       </tr>
     )
@@ -194,18 +212,18 @@ const DataTable = <T,>({
   }
 
   const searchBar = handleSearch && (
-    <div className='px-6 py-4 border-b border-gray-200'>
-      <div className='flex items-center justify-between'>
-        <div className='flex-1 max-w-md'>
+    <div className='bg-gradient-to-r from-gray-50 to-white px-6 py-6 border-b border-gray-200'>
+      <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4'>
+        <div className='flex-1 max-w-2xl'>
           <label htmlFor='search-input' className='sr-only'>
             Buscar
           </label>
-          <div className='relative'>
-            <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
+          <div className='relative group'>
+            <div className='absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none z-10'>
               {isSearching ? (
-                <div className='w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin'></div>
+                <div className='w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin'></div>
               ) : (
-                <MagnifyingGlassIcon className='w-4 h-4 text-gray-400' />
+                <MagnifyingGlassIcon className='w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors' />
               )}
             </div>
             <input
@@ -213,46 +231,57 @@ const DataTable = <T,>({
               id='search-input'
               value={searchValue}
               onChange={handleSearchChange}
-              className={`block w-full pl-10 pr-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${
-                isSearching ? 'border-blue-300 bg-blue-50' : 'border-gray-300'
-              }`}
+              className={`block w-full pl-12 pr-6 py-4 text-sm bg-white border-2 rounded-xl shadow-sm transition-all duration-200 ${
+                isSearching
+                  ? 'border-blue-300 bg-blue-50 ring-2 ring-blue-100'
+                  : 'border-gray-200 hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100'
+              } focus:outline-none placeholder-gray-500`}
               placeholder={searchPlaceholder}
               disabled={isLoading}
             />
             {isSearching && (
-              <div className='absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none'>
-                <span className='text-xs text-blue-600 font-medium'>Buscando...</span>
+              <div className='absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none'>
+                <span className='text-xs text-blue-600 font-semibold bg-blue-100 px-3 py-1.5 rounded-full border border-blue-200'>
+                  Buscando...
+                </span>
               </div>
             )}
           </div>
         </div>
         {createAction && (
-          <button
-            type='button'
-            onClick={createAction.onClick}
-            className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors cursor-pointer'
-          >
-            {createAction.label}
-          </button>
+          <div className='flex-shrink-0'>
+            <button
+              type='button'
+              onClick={createAction.onClick}
+              className='inline-flex items-center px-8 py-4 border border-transparent text-sm font-semibold rounded-xl shadow-lg text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-3 focus:ring-blue-300 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-all duration-200 active:scale-95'
+              disabled={isLoading}
+            >
+              {createAction.icon && <span className='mr-2 text-blue-100'>{createAction.icon}</span>}
+              <span className='font-medium'>{createAction.label}</span>
+            </button>
+          </div>
         )}
       </div>
     </div>
   )
 
   return (
-    <>
-      <h1 className='text-2xl font-bold mb-6 text-gray-900'>{title}</h1>
+    <div className='space-y-1'>
+      <div className='px-6 pt-6 pb-4'>
+        <h1 className='text-3xl font-bold text-gray-900 tracking-tight'>{title}</h1>
+        <p className='mt-2 text-sm text-gray-600'>Gestiona y organiza la información de manera eficiente</p>
+      </div>
       {isLoading ? (
         loader
       ) : data.items.length > 0 ? (
-        <div className='bg-white rounded-lg shadow-sm overflow-hidden'>
+        <div className='bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden'>
           {searchBar}
           <div className='overflow-x-auto'>
-            <table className='min-w-full divide-y divide-gray-200'>
-              <thead className='bg-gray-50'>
+            <table className='min-w-full'>
+              <thead className='bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200'>
                 <tr>{tableHeader}</tr>
               </thead>
-              <tbody className='bg-white divide-y divide-gray-200'>{tableBody}</tbody>
+              <tbody className='bg-white divide-y divide-gray-100'>{tableBody}</tbody>
             </table>
           </div>
           <Pagination
@@ -265,11 +294,12 @@ const DataTable = <T,>({
           />
         </div>
       ) : (
-        <div className='bg-white rounded-lg shadow-sm overflow-hidden'>
-          <div className='px-6 py-16 text-center'>
-            <div className='mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gray-100 mb-4'>
+        <div className='bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden'>
+          {searchBar}
+          <div className='px-6 py-20 text-center'>
+            <div className='mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-gray-100 mb-6'>
               <svg
-                className='h-8 w-8 text-gray-400'
+                className='h-10 w-10 text-gray-400'
                 fill='none'
                 viewBox='0 0 24 24'
                 stroke='currentColor'
@@ -283,12 +313,21 @@ const DataTable = <T,>({
                 />
               </svg>
             </div>
-            <h3 className='text-lg font-medium text-gray-900 mb-2'>{emptyMessage}</h3>
-            <p className='text-sm text-gray-500'>No data available at this time.</p>
+            <h3 className='text-xl font-semibold text-gray-900 mb-3'>{emptyMessage}</h3>
+            <p className='text-sm text-gray-500 mb-6'>No hay información disponible en este momento.</p>
+            {createAction && (
+              <button
+                onClick={createAction.onClick}
+                className='inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors'
+              >
+                {createAction.icon && <span className='mr-2'>{createAction.icon}</span>}
+                {createAction.label}
+              </button>
+            )}
           </div>
         </div>
       )}
-    </>
+    </div>
   )
 }
 
