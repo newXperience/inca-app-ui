@@ -1,3 +1,5 @@
+import { FormProvider } from 'react-hook-form'
+
 import { type QuestionFormData, useQuestionForm } from '../hooks/useQuestionForm'
 import { useQuestionMutation } from '../hooks/useQuestionMutation'
 import { type QuestionResponse } from '../hooks/useQuestions'
@@ -56,35 +58,37 @@ const QuestionModal = ({ isOpen, onClose, question }: QuestionModalProps) => {
 
   return (
     <Modal isOpen={isOpen} onClose={handleCancel} title={title} size='lg'>
-      <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
-        {/* Question, Feedback, and Status Fields */}
-        <QuestionFormFields
-          register={register}
-          errors={errors}
-          showStatus={showStatus}
-          defaultValues={
-            question
-              ? {
-                  question: question.question,
-                  feedback: question.feedback || '',
-                  status: question.status,
-                }
-              : undefined
-          }
-        />
+      <FormProvider {...form}>
+        <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
+          {/* Question, Feedback, and Status Fields */}
+          <QuestionFormFields
+            register={register}
+            errors={errors}
+            showStatus={showStatus}
+            defaultValues={
+              question
+                ? {
+                    question: question.question,
+                    feedback: question.feedback || '',
+                    status: question.status,
+                  }
+                : undefined
+            }
+          />
 
-        {/* Answers Section */}
-        <AnswersList register={register} control={control} errors={errors} />
+          {/* Answers Section */}
+          <AnswersList register={register} control={control} errors={errors} />
 
-        {/* Form Actions */}
-        <ModalActions
-          onCancel={handleCancel}
-          isLoading={isLoading}
-          submitText={mode === 'edit' ? 'Guardar Cambios' : 'Crear Pregunta'}
-          disabled={!isValid}
-          submitType='submit'
-        />
-      </form>
+          {/* Form Actions */}
+          <ModalActions
+            onCancel={handleCancel}
+            isLoading={isLoading}
+            submitText={mode === 'edit' ? 'Guardar Cambios' : 'Crear Pregunta'}
+            disabled={!isValid}
+            submitType='submit'
+          />
+        </form>
+      </FormProvider>
     </Modal>
   )
 }

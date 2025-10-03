@@ -19,8 +19,8 @@ const questionFormSchema = z.object({
       })
     )
     .min(1, 'Se requiere al menos una respuesta')
-    .refine((answers) => answers.some((answer) => answer.isCorrect), {
-      message: 'Debe haber al menos una respuesta correcta',
+    .refine((answers) => answers.filter((answer) => answer.isCorrect).length === 1, {
+      message: 'Debe seleccionar exactamente una respuesta como correcta',
     }),
 })
 

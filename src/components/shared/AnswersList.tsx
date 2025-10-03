@@ -1,7 +1,12 @@
-import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { type Control, type FieldErrors, useFieldArray, type UseFormRegister } from 'react-hook-form'
+import { useEffect } from 'react'
 
+import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { type Control, type FieldErrors, useFieldArray, useFormContext, type UseFormRegister } from 'react-hook-form'
+
+import { useCorrectAnswerSelection } from '../../hooks/useCorrectAnswerSelection'
 import { type QuestionFormData } from '../../hooks/useQuestionForm'
+
+import CorrectAnswerRadio from './CorrectAnswerRadio'
 
 interface AnswersListProps {
   register: UseFormRegister<QuestionFormData>
@@ -10,17 +15,49 @@ interface AnswersListProps {
 }
 
 const AnswersList = ({ register, control, errors }: AnswersListProps) => {
+  const { setValue, watch, trigger } = useFormContext<QuestionFormData>()
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'answers',
   })
 
+  // Custom hook for managing correct answer selection
+  const { selectedIndex, selectCorrectAnswer, initializeSelection, handleAnswerRemoval } = useCorrectAnswerSelection(
+    fields.length,
+    setValue,
+    trigger
+  )
+
+  // Watch answers to initialize selection based on existing data
+  const watchedAnswers = watch('answers')
+
+  // Initialize selection when component mounts or data changes
+  useEffect(() => {
+    if (watchedAnswers && watchedAnswers.length > 0) {
+      initializeSelection(watchedAnswers)
+    }
+  }, [watchedAnswers, initializeSelection])
+
   const addAnswer = () => {
     append({ value: '', isCorrect: false })
+
+    // After adding, ensure we have exactly one correct answer
+    // If no answer is currently correct, select the first one
+    const currentAnswers = watch('answers')
+    const hasCorrectAnswer = currentAnswers?.filter((answer) => answer.isCorrect).length === 1
+
+    if (!hasCorrectAnswer) {
+      selectCorrectAnswer(0)
+    } else {
+      // Just trigger validation to clear any errors
+      trigger('answers')
+    }
   }
 
   const removeAnswer = (index: number) => {
     if (fields.length > 1) {
+      // Handle selection adjustment before removing
+      handleAnswerRemoval(index, fields.length - 1)
       remove(index)
     }
   }
@@ -49,10 +86,7 @@ const AnswersList = ({ register, control, errors }: AnswersListProps) => {
               )}
             </div>
 
-            <label className='flex items-center'>
-              <input type='checkbox' {...register(`answers.${index}.isCorrect`)} className='mr-2' />
-              <span className='text-sm text-gray-600'>Correcta</span>
-            </label>
+            <CorrectAnswerRadio index={index} isSelected={selectedIndex === index} onSelect={selectCorrectAnswer} />
 
             {fields.length > 1 && (
               <button
