@@ -15,6 +15,8 @@ const signInAPI = async (username: string, password: string) => {
     username,
     password,
   })
+  console.log(data.data)
+  if (data.data.role !== 'ADMIN') throw new Error('No tienes permiso para iniciar sesión')
   return data.data
 }
 
