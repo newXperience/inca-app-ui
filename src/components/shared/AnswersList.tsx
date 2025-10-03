@@ -64,7 +64,7 @@ const AnswersList = ({ register, control, errors }: AnswersListProps) => {
 
   return (
     <div>
-      <label className='block text-sm font-medium text-gray-700 mb-2'>Respuestas *</label>
+      <label className='block text-sm font-medium text-gray-700 mb-2'>Respuestas*</label>
 
       <div className='space-y-3'>
         {fields.map((field, index) => (

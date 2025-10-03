@@ -19,7 +19,7 @@ const QuestionFormFields = ({ register, errors, showStatus = false, defaultValue
       {/* Question Field */}
       <div>
         <label htmlFor='question' className='block text-sm font-medium text-gray-700 mb-2'>
-          Pregunta *
+          Pregunta*
         </label>
         <textarea
           id='question'
