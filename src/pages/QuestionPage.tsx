@@ -8,19 +8,17 @@ import {
 } from '@heroicons/react/24/outline'
 import { useSearchParams } from 'react-router-dom'
 
-import CreateQuestionModal from '../components/CreateQuestionModal'
 import { type PagedData } from '../components/DataTable'
 import DeleteQuestionModal from '../components/DeleteQuestionModal'
-import EditQuestionModal from '../components/EditQuestionModal'
 import QuestionListView from '../components/QuestionListView'
+import QuestionModal from '../components/QuestionModal'
 import { type QuestionResponse, useQuestions } from '../hooks/useQuestions'
 
 const QuestionPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [debouncedSearch, setDebouncedSearch] = useState(searchParams.get('search') || '')
   const [isSearching, setIsSearching] = useState(false)
-  const [editModalOpen, setEditModalOpen] = useState(false)
-  const [createModalOpen, setCreateModalOpen] = useState(false)
+  const [questionModalOpen, setQuestionModalOpen] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [selectedQuestion, setSelectedQuestion] = useState<QuestionResponse | undefined>()
 
@@ -74,20 +72,17 @@ const QuestionPage = () => {
 
   const handleEditQuestion = (question: QuestionResponse) => {
     setSelectedQuestion(question)
-    setEditModalOpen(true)
-  }
-
-  const handleCloseEditModal = () => {
-    setEditModalOpen(false)
-    setSelectedQuestion(undefined)
+    setQuestionModalOpen(true)
   }
 
   const handleCreateQuestion = () => {
-    setCreateModalOpen(true)
+    setSelectedQuestion(undefined)
+    setQuestionModalOpen(true)
   }
 
-  const handleCloseCreateModal = () => {
-    setCreateModalOpen(false)
+  const handleCloseQuestionModal = () => {
+    setQuestionModalOpen(false)
+    setSelectedQuestion(undefined)
   }
 
   const handleDeleteQuestion = (question: QuestionResponse) => {
@@ -210,8 +205,7 @@ const QuestionPage = () => {
       </div>
 
       {/* Modals */}
-      <EditQuestionModal isOpen={editModalOpen} onClose={handleCloseEditModal} question={selectedQuestion} />
-      <CreateQuestionModal isOpen={createModalOpen} onClose={handleCloseCreateModal} />
+      <QuestionModal isOpen={questionModalOpen} onClose={handleCloseQuestionModal} question={selectedQuestion} />
       <DeleteQuestionModal isOpen={deleteModalOpen} onClose={handleCloseDeleteModal} question={selectedQuestion} />
     </div>
   )
